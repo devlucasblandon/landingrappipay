@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rappi - RappiPay Activado</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      padding: 32px 24px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-button {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-icon {
+      width: 16px;
+      height: 16px;
+      position: relative;
+    }
+
+    .close-icon::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background: #666;
+      transform: rotate(45deg);
+      top: 7px;
+      left: 0;
+    }
+
+    .close-icon::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background: #666;
+      transform: rotate(-45deg);
+      top: 7px;
+      left: 0;
+    }
+
+    .shield-icon {
+      width: 80px;
+      height: 80px;
+      background: #F0784E;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .house-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .house-icon::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 12px;
+      background: white;
+      top: 8px;
+      left: 10px;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .house-icon::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 8px solid white;
+      top: 0;
+      left: 10px;
+    }
+
+    .main-heading {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .description {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 32px;
+      line-height: 1.4;
+    }
+
+    .action-button {
+      background: #F0784E;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .action-button:hover {
+      background: #e06a42;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 360px) {
+      .modal {
+        padding: 24px 16px;
+        max-width: 280px;
+      }
+      
+      .main-heading {
+        font-size: 20px;
+      }
+      
+      .description {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-overlay">
+    <div class="modal">
+      <button class="close-button">
+        <div class="close-icon"></div>
+      </button>
+      
+      <div class="shield-icon">
+        <div class="house-icon"></div>
+      </div>
+      
+      <div class="main-heading">
+        ¡RappiPay<br>activado!
+      </div>
+      
+      <div class="description">
+        Tu cashbá·kserá aplicado<br>al instante.
+      </div>
+      
+      <a href="inicio8.html" class="action-button">
+        Finalizar pedido
+      </a>
+    </div>
+  </div>
+</body>
+</html> 

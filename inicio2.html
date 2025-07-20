@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rappi - Búsqueda</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .app-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Search Bar */
+    .search-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .search-bar {
+      background: #f8f9fa;
+      border-radius: 24px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #e9ecef;
+    }
+
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      background: #666;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .search-icon::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 2px solid white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+    }
+
+    .search-icon::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 2px;
+      background: white;
+      transform: rotate(45deg);
+      bottom: 2px;
+      right: 2px;
+    }
+
+    .search-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Filter Options */
+    .filter-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-radius: 16px;
+      border: 1px solid #e9ecef;
+      white-space: nowrap;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .filter-chip.active {
+      background: #ff6b35;
+      color: white;
+      border-color: #ff6b35;
+    }
+
+    .filter-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .filter-icon.sort {
+      background: #666;
+      position: relative;
+    }
+
+    .filter-icon.sort::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: white;
+      top: 2px;
+      left: 2px;
+    }
+
+    .filter-icon.sort::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 2px;
+      background: white;
+      top: 5px;
+      left: 3px;
+    }
+
+    .filter-icon.trophy {
+      background: #ffd700;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .filter-icon.trophy::before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #333;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+    }
+
+    .filter-icon.lightning {
+      background: #ff6b35;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .filter-icon.star {
+      background: #ffd700;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .chevron-down {
+      width: 8px;
+      height: 8px;
+      background: #666;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+    }
+
+    /* Food Categories */
+    .categories-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .categories-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 80px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .category-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-text {
+      font-size: 11px;
+      text-align: center;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Food Icons */
+    .food-hamburger {
+      width: 40px;
+      height: 30px;
+      background: #f7931e;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .food-hamburger::before {
+      content: '';
+      position: absolute;
+      width: 36px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      top: 4px;
+      left: 2px;
+    }
+
+    .food-hamburger::after {
+      content: '';
+      position: absolute;
+      width: 32px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      bottom: 4px;
+      left: 4px;
+    }
+
+    .food-sushi {
+      width: 40px;
+      height: 30px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .sushi-roll {
+      width: 16px;
+      height: 16px;
+      background: #ff6b35;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .sushi-roll::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      top: 4px;
+      left: 4px;
+    }
+
+    .food-pizza {
+      width: 40px;
+      height: 30px;
+      background: #ff6b35;
+      border-radius: 50%;
+      position: relative;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    .food-pizza::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #00d4aa;
+      border-radius: 50%;
+      top: 6px;
+      left: 6px;
+    }
+
+    .food-pizza::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ffd700;
+      border-radius: 50%;
+      top: 12px;
+      left: 20px;
+    }
+
+    /* Promotional Banner */
+    .promo-section {
+      padding: 16px;
+      background: white;
+    }
+
+    .promo-banner {
+      background: linear-gradient(135deg, #f4f1eb, #e8d5c4);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      height: 200px;
+    }
+
+    .promo-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .promo-right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff6b35, #fdcb6e);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .promo-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .promo-subtitle {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .promo-terms {
+      font-size: 8px;
+      color: #999;
+      line-height: 1.2;
+    }
+
+    .promo-price-label {
+      font-size: 10px;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .promo-price {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fcee09;
+      margin-bottom: 8px;
+    }
+
+    .promo-brand {
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .promo-products {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .product-cola {
+      width: 20px;
+      height: 30px;
+      background: #c41e3a;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .product-cola::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 4px;
+      background: white;
+      border-radius: 2px;
+      top: 4px;
+      left: 2px;
+    }
+
+    .product-sandwich {
+      width: 30px;
+      height: 20px;
+      background: #fdcb6e;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .product-sandwich::before {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 3px;
+      background: #8b4513;
+      border-radius: 2px;
+      top: 8px;
+      left: 2px;
+    }
+
+    .brand-logo {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .logo-q {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #333;
+      font-size: 12px;
+    }
+
+    .logo-text {
+      font-size: 8px;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Carousel Indicators */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e9ecef;
+    }
+
+    .indicator.active {
+      background: #333;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 375px;
+      background: white;
+      border-top: 1px solid #f0f0f0;
+      padding: 8px 0;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #999;
+      font-size: 10px;
+    }
+
+    .nav-item.active {
+      color: #ff6b35;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-icon.search {
+      background: #ff6b35;
+      color: white;
+    }
+
+    .nav-icon.star {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    .nav-icon.lock {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    .nav-icon.person {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    /* Add bottom padding to account for fixed nav */
+    .app-container {
+      padding-bottom: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-bar">
+        <div class="search-icon"></div>
+        <span class="search-placeholder">Buscar platos o restaurantes</span>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-row">
+        <div class="filter-chip">
+          <div class="filter-icon sort"></div>
+          <span>Ordenar</span>
+          <div class="chevron-down"></div>
+        </div>
+        
+        <div class="filter-chip active">
+          <div class="filter-icon trophy"></div>
+          <span>Top</span>
+        </div>
+        
+        <div class="filter-chip">
+          <div class="filter-icon lightning"></div>
+          <span>35 mins</span>
+        </div>
+        
+        <div class="filter-chip">
+          <div class="filter-icon star"></div>
+          <span>☆+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Categories -->
+    <div class="categories-section">
+      <div class="categories-row">
+        <a href="inicio3.html" class="category-item">
+          <div class="category-image">
+            <div class="food-hamburger"></div>
+          </div>
+          <span class="category-text">Hamburguesa</span>
+        </a>
+        
+        <a href="inicio3.html" class="category-item">
+          <div class="category-image">
+            <div class="food-sushi">
+              <div class="sushi-roll"></div>
+              <div class="sushi-roll"></div>
+            </div>
+          </div>
+          <span class="category-text">Sushi</span>
+        </a>
+        
+        <a href="inicio3.html" class="category-item">
+          <div class="category-image">
+            <div class="food-pizza"></div>
+          </div>
+          <span class="category-text">Pizza</span>
+        </a>
+        
+        <a href="inicio3.html" class="category-item">
+          <div class="category-image">
+            <!-- Placeholder for Salc -->
+          </div>
+          <span class="category-text">Salc</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Promotional Banner -->
+    <div class="promo-section">
+      <div class="promo-banner">
+        <div class="promo-left">
+          <div>
+            <div class="promo-title">Hasta 37% Off</div>
+            <div class="promo-subtitle">Hasta el 31 de octubre...</div>
+          </div>
+          <div class="promo-terms">
+            Hasta agotar existencias Aplican T&C No incluye Tarifa de Servicio ni Costo de Envío https://promos.reppi.com/colombia/ descuentos en prod
+          </div>
+        </div>
+        
+        <div class="promo-right">
+          <div class="promo-price-label">de la casa sólo por:</div>
+          <div class="promo-price">2.900</div>
+          <div class="promo-brand">BANO</div>
+          <div class="promo-products">
+            <div class="product-cola"></div>
+            <div class="product-sandwich"></div>
+          </div>
+          <div class="brand-logo">
+            <div class="logo-q">Q</div>
+            <div class="logo-text">BANO</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <a href="inicio2.html" class="nav-item active">
+        <div class="nav-icon search">🔍</div>
+        <span>Buscar</span>
+      </a>
+      
+      <a href="inicio3.html" class="nav-item">
+        <div class="nav-icon star">⭐</div>
+        <span>Ofertas</span>
+      </a>
+      
+      <a href="inicio3.html" class="nav-item">
+        <div class="nav-icon lock">🔒</div>
+        <span>Favoritos</span>
+      </a>
+      
+      <a href="inicio3.html" class="nav-item">
+        <div class="nav-icon person">👤</div>
+        <span>Cuenta</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html> 

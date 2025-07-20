@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rappi - Restaurantes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .app-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Search Bar */
+    .search-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .search-bar {
+      background: #f8f9fa;
+      border-radius: 24px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #e9ecef;
+    }
+
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      background: #666;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .search-icon::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 2px solid white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+    }
+
+    .search-icon::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 2px;
+      background: white;
+      transform: rotate(45deg);
+      bottom: 2px;
+      right: 2px;
+    }
+
+    .search-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Filter Options */
+    .filter-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-radius: 16px;
+      border: 1px solid #e9ecef;
+      white-space: nowrap;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .filter-chip.active {
+      background: #ff6b35;
+      color: white;
+      border-color: #ff6b35;
+    }
+
+    .filter-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .filter-icon.sort {
+      background: #666;
+      position: relative;
+    }
+
+    .filter-icon.sort::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: white;
+      top: 2px;
+      left: 2px;
+    }
+
+    .filter-icon.sort::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 2px;
+      background: white;
+      top: 5px;
+      left: 3px;
+    }
+
+    .filter-icon.trophy {
+      background: #ffd700;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .filter-icon.trophy::before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #333;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+    }
+
+    .filter-icon.lightning {
+      background: #ff6b35;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .filter-icon.star {
+      background: #ffd700;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .notification-icon {
+      width: 24px;
+      height: 24px;
+      background: #333;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notification-icon::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background: white;
+      top: 8px;
+      left: 6px;
+    }
+
+    .notification-icon::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: white;
+      top: 11px;
+      left: 8px;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: #00d4aa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .chevron-down {
+      width: 8px;
+      height: 8px;
+      background: #666;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+    }
+
+    /* Food Categories */
+    .categories-section {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .categories-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 80px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .category-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-image.sushi {
+      background: #e8f5e8;
+    }
+
+    .category-text {
+      font-size: 11px;
+      text-align: center;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .category-text.active {
+      color: #00d4aa;
+    }
+
+    /* Food Icons */
+    .food-hamburger {
+      width: 40px;
+      height: 30px;
+      background: #f7931e;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .food-hamburger::before {
+      content: '';
+      position: absolute;
+      width: 36px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      top: 4px;
+      left: 2px;
+    }
+
+    .food-hamburger::after {
+      content: '';
+      position: absolute;
+      width: 32px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      bottom: 4px;
+      left: 4px;
+    }
+
+    .food-sushi {
+      width: 40px;
+      height: 30px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .sushi-roll {
+      width: 16px;
+      height: 16px;
+      background: #ff6b35;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .sushi-roll::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      top: 4px;
+      left: 4px;
+    }
+
+    .food-pizza {
+      width: 40px;
+      height: 30px;
+      background: #ff6b35;
+      border-radius: 50%;
+      position: relative;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    .food-pizza::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #00d4aa;
+      border-radius: 50%;
+      top: 6px;
+      left: 6px;
+    }
+
+    .food-pizza::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ffd700;
+      border-radius: 50%;
+      top: 12px;
+      left: 20px;
+    }
+
+    /* Restaurant Header */
+    .restaurant-header {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .restaurant-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Restaurant Card */
+    .restaurant-section {
+      padding: 16px;
+      background: white;
+    }
+
+    .restaurant-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 16px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .restaurant-image {
+      position: relative;
+      height: 200px;
+      background: linear-gradient(135deg, #ff6b35, #ff4757);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bento-container {
+      width: 120px;
+      height: 80px;
+      background: #333;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 4px;
+      padding: 8px;
+    }
+
+    .bento-compartment {
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .bento-sushi {
+      background: #ff6b35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .bento-sushi-item {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .bento-salad {
+      background: #8e44ad;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bento-salad-item {
+      width: 6px;
+      height: 6px;
+      background: #00d4aa;
+      border-radius: 50%;
+      margin: 1px;
+    }
+
+    .bento-tempura {
+      background: #fdcb6e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bento-tempura-item {
+      width: 4px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 50%;
+      margin: 1px;
+    }
+
+    .bento-rice {
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bento-rice-item {
+      width: 3px;
+      height: 3px;
+      background: #ff6b35;
+      border-radius: 50%;
+      margin: 1px;
+    }
+
+    .top-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #333;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .top-badge::before {
+      content: '🏆';
+      font-size: 8px;
+    }
+
+    .restaurant-info {
+      padding: 16px;
+    }
+
+    .restaurant-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .restaurant-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .detail-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .detail-icon.clock {
+      background: #666;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .detail-icon.clock::before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border: 1px solid white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+    }
+
+    .detail-icon.clock::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 3px;
+      background: white;
+      top: 3px;
+      left: 5.5px;
+    }
+
+    .detail-icon.delivery {
+      background: #ffd700;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .detail-icon.delivery::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      top: 4px;
+      left: 2px;
+    }
+
+    .detail-icon.star {
+      background: #333;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .free-delivery {
+      color: #0984e3;
+      font-weight: 500;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 375px;
+      background: white;
+      border-top: 1px solid #f0f0f0;
+      padding: 8px 0;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #999;
+      font-size: 10px;
+    }
+
+    .nav-item.active {
+      color: #ff6b35;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-icon.search {
+      background: #ff6b35;
+      color: white;
+    }
+
+    .nav-icon.star {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    .nav-icon.lock {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    .nav-icon.person {
+      background: #f8f9fa;
+      color: #999;
+    }
+
+    /* Add bottom padding to account for fixed nav */
+    .app-container {
+      padding-bottom: 80px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-bar">
+        <div class="search-icon"></div>
+        <span class="search-placeholder">Buscar platos o restaurantes</span>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-row">
+        <div class="notification-icon">
+          <div class="notification-badge">1</div>
+        </div>
+        
+        <div class="filter-chip">
+          <div class="filter-icon sort"></div>
+          <span>Ordenar</span>
+          <div class="chevron-down"></div>
+        </div>
+        
+        <div class="filter-chip active">
+          <div class="filter-icon trophy"></div>
+          <span>Top</span>
+        </div>
+        
+        <div class="filter-chip">
+          <div class="filter-icon lightning"></div>
+          <span>35 mins</span>
+        </div>
+        
+        <div class="filter-chip">
+          <div class="filter-icon star"></div>
+          <span>☆+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Categories -->
+    <div class="categories-section">
+      <div class="categories-row">
+        <a href="inicio4.html" class="category-item">
+          <div class="category-image">
+            <div class="food-hamburger"></div>
+          </div>
+          <span class="category-text">Hamburguesa</span>
+        </a>
+        
+        <a href="inicio4.html" class="category-item">
+          <div class="category-image sushi">
+            <div class="food-sushi">
+              <div class="sushi-roll"></div>
+              <div class="sushi-roll"></div>
+            </div>
+          </div>
+          <span class="category-text active">Sushi</span>
+        </a>
+        
+        <a href="inicio4.html" class="category-item">
+          <div class="category-image">
+            <div class="food-pizza"></div>
+          </div>
+          <span class="category-text">Pizza</span>
+        </a>
+        
+        <a href="inicio4.html" class="category-item">
+          <div class="category-image">
+            <!-- Placeholder for Salc -->
+          </div>
+          <span class="category-text">Salc</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Restaurant Header -->
+    <div class="restaurant-header">
+      <div class="restaurant-title">+12 restaurantes para ti</div>
+    </div>
+
+    <!-- Restaurant Card -->
+    <div class="restaurant-section">
+      <a href="inicio4.html" class="restaurant-card">
+        <div class="restaurant-image">
+          <div class="bento-container">
+            <div class="bento-compartment bento-sushi">
+              <div class="bento-sushi-item"></div>
+              <div class="bento-sushi-item"></div>
+            </div>
+            <div class="bento-compartment bento-salad">
+              <div class="bento-salad-item"></div>
+              <div class="bento-salad-item"></div>
+            </div>
+            <div class="bento-compartment bento-tempura">
+              <div class="bento-tempura-item"></div>
+              <div class="bento-tempura-item"></div>
+            </div>
+            <div class="bento-compartment bento-rice">
+              <div class="bento-rice-item"></div>
+              <div class="bento-rice-item"></div>
+            </div>
+          </div>
+          
+          <div class="top-badge">TOP</div>
+        </div>
+        
+        <div class="restaurant-info">
+          <div class="restaurant-name">Sarku Japan</div>
+          <div class="restaurant-details">
+            <div class="detail-row">
+              <div class="detail-icon clock"></div>
+              <span>61 min</span>
+            </div>
+            <div class="detail-row">
+              <div class="detail-icon delivery"></div>
+              <span class="free-delivery">ENVÍO GRATIS</span>
+            </div>
+            <div class="detail-row">
+              <span>2.3 km</span>
+            </div>
+            <div class="detail-row">
+              <div class="detail-icon star"></div>
+              <span>4.6 (309)</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <a href="inicio3.html" class="nav-item active">
+        <div class="nav-icon search">🔍</div>
+        <span>Buscar</span>
+      </a>
+      
+      <a href="inicio4.html" class="nav-item">
+        <div class="nav-icon star">⭐</div>
+        <span>Ofertas</span>
+      </a>
+      
+      <a href="inicio4.html" class="nav-item">
+        <div class="nav-icon lock">🔒</div>
+        <span>Favoritos</span>
+      </a>
+      
+      <a href="inicio4.html" class="nav-item">
+        <div class="nav-icon person">👤</div>
+        <span>Cuenta</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html> 

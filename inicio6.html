@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rappi - Confirmación de Pedido</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .app-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Top Header */
+    .header {
+      padding: 40px 16px 24px;
+      text-align: center;
+      background: white;
+    }
+
+    .order-ready-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      line-height: 1.2;
+    }
+
+    /* Order Summary Card */
+    .order-section {
+      padding: 0 16px 24px;
+      background: white;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e9ecef;
+    }
+
+    .restaurant-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .order-items {
+      margin-bottom: 20px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .item-description {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .item-price {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e9ecef;
+      margin: 16px 0;
+    }
+
+    .total-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-label {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .total-amount {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Payment Button */
+    .payment-section {
+      padding: 0 16px 24px;
+      background: white;
+    }
+
+    .payment-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ff6b35, #ff4757);
+      border: none;
+      border-radius: 16px;
+      padding: 20px 24px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+      text-decoration: none;
+    }
+    .payment-btn-dos {
+      width: 100%;
+      background: linear-gradient(135deg, #c5c3c2, #f1eaea);
+      border: none;
+      border-radius: 16px;
+      padding: 20px 24px;
+      color: rgb(16, 1, 1);
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+    }
+
+    .payment-btn:hover {
+      background: linear-gradient(135deg, #ff5a2c, #ff3742);
+    }
+
+    .payment-text {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .cashback-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* Promotional Text */
+    .promo-section {
+      padding: 0 16px 40px;
+      background: white;
+    }
+
+    .promo-text {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Responsive adjustments */
+    @media (max-height: 700px) {
+      .header {
+        padding: 24px 16px 16px;
+      }
+      
+      .order-ready-text {
+        font-size: 24px;
+      }
+      
+      .order-card {
+        padding: 20px;
+      }
+      
+      .payment-btn {
+        padding: 16px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <div class="header">
+      <div class="order-ready-text">Tu pedido está listo</div>
+    </div>
+
+    <!-- Order Summary Card -->
+    <div class="order-section">
+      <div class="order-card">
+        <div class="restaurant-name">Gou Pizza</div>
+        
+        <div class="order-items">
+          <div class="order-item">
+            <div class="item-description">1x Pizza Pepperoni</div>
+            <div class="item-price">$45.000</div>
+          </div>
+          
+          <div class="order-item">
+            <div class="item-description">1x Bebida</div>
+            <div class="item-price"></div>
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="total-section">
+          <div class="total-label">Total</div>
+          <div class="total-amount">$45.000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Button -->
+    <div class="payment-section">
+      <a href="inicio7.html" class="payment-btn">
+        <div class="payment-text">Pagar con RappiPay</div>
+        <div class="cashback-text">(Obten 10% de cashback)</div>
+      </a>
+    </div>
+
+     <!-- Payment Button -->
+     <div class="payment-section">
+        <button class="payment-btn-dos">
+          <div class="payment-text-dos">Pagar sin RappiPay</div>
+          <div class="cashback-text">(0% de cashback)</div>
+        </button>
+      </div>
+
+    <!-- Promotional Text -->
+    <div class="promo-section">
+      <div class="promo-text">
+        Activa RappiPay en 1 solo paso, Sin comisiones.
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

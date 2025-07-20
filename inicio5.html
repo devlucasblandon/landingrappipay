@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rappi - Carrito</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .app-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Top Header */
+    .header {
+      background: #f8f9fa;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .back-arrow {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .back-arrow::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background: #333;
+      top: 11px;
+      left: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .back-arrow::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background: #333;
+      top: 11px;
+      left: 6px;
+      transform: rotate(45deg);
+    }
+
+    .restaurant-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 24px 16px;
+      flex: 1;
+    }
+
+    .cart-item {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .burger-icon {
+      width: 50px;
+      height: 35px;
+      background: #fdcb6e;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .burger-icon::before {
+      content: '';
+      position: absolute;
+      width: 46px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      top: 6px;
+      left: 2px;
+    }
+
+    .burger-icon::after {
+      content: '';
+      position: absolute;
+      width: 42px;
+      height: 4px;
+      background: #8b4513;
+      border-radius: 2px;
+      bottom: 6px;
+      left: 4px;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .item-price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trash-icon {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .trash-icon::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 14px;
+      background: #ff4757;
+      border-radius: 2px;
+      top: 2px;
+      left: 4px;
+    }
+
+    .trash-icon::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background: #ff4757;
+      top: 0;
+      left: 2px;
+    }
+
+    .quantity-display {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .plus-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #00d4aa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .plus-icon::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background: white;
+    }
+
+    .plus-icon::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 12px;
+      background: white;
+    }
+
+    .empty-cart-link {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .empty-cart-btn {
+      color: #ff4757;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .empty-cart-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Bottom Footer */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 375px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .subtotal-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .subtotal-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .subtotal-amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .continue-btn {
+      background: #00d4aa;
+      border: none;
+      border-radius: 24px;
+      padding: 16px 32px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+    }
+
+    .continue-btn:hover {
+      background: #00b894;
+    }
+
+    /* Add bottom padding to account for fixed footer */
+    .app-container {
+      padding-bottom: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <div class="header">
+      <div class="back-arrow"></div>
+      <div class="restaurant-name">Marvel Burger</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="cart-item">
+        <div class="item-image">
+          <div class="burger-icon"></div>
+        </div>
+        
+        <div class="item-details">
+          <div class="item-name">Hamburgues<br>a Iron Burger</div>
+          <div class="item-price">$26.000</div>
+        </div>
+        
+        <div class="quantity-controls">
+          <div class="trash-icon"></div>
+          <div class="quantity-display">1</div>
+          <div class="plus-icon"></div>
+        </div>
+      </div>
+
+      <div class="empty-cart-link">
+        <a href="inicio6.html" class="empty-cart-btn">Vaciar canasta</a>
+      </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="footer">
+      <div class="subtotal-section">
+        <div class="subtotal-label">Subtotal</div>
+        <div class="subtotal-amount">$26.000</div>
+      </div>
+      
+      <a href="inicio6.html" class="continue-btn">Continuar</a>
+    </div>
+  </div>
+</body>
+</html> 
